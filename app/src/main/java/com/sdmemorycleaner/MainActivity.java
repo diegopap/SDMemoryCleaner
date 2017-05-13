@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "delete", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.select_all:
-                Toast.makeText(this, "select all", Toast.LENGTH_SHORT).show();
+                folderAdapter.selectAll();
                 break;
         }
         return super.onOptionsItemSelected(item);

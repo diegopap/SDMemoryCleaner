@@ -78,4 +78,11 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         }
     }
 
+    public void selectAll() {
+        for (int i = 0; i < selectedFolders.size(); i++) {
+            selectedFolders.set(i, true);
+        }
+        notifyDataSetChanged();
+    }
+
 }
