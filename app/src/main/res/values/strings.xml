@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">SDMemoryCleaner</string>
+    <string name="app_name">SD Memory Cleaner</string>
+    <string name="select_all">SELECT ALL</string>
 </resources>
