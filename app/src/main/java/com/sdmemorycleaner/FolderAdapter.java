@@ -22,12 +22,17 @@ import butterknife.ButterKnife;
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<File> folders = new ArrayList<>();
-    private ArrayList<Boolean> selectedFolders = new ArrayList<>();
+    private ArrayList<File> folders;
+    private ArrayList<Boolean> selectedFolders;
 
     public FolderAdapter(Context context) {
         this.context = context;
-        this.folders = FileUtils.getFolders(context);
+        init(context);
+    }
+
+    private void init(Context context) {
+        selectedFolders = new ArrayList<>();
+        folders = FileUtils.getFolders(context);
         for (File ignored : folders) {
             selectedFolders.add(false);
         }
@@ -82,6 +87,16 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         for (int i = 0; i < selectedFolders.size(); i++) {
             selectedFolders.set(i, true);
         }
+        notifyDataSetChanged();
+    }
+
+    public void deleteSelected() {
+        for (int i = 0; i < selectedFolders.size(); i++) {
+            if (selectedFolders.get(i)) {
+                FileUtils.deleteRecursive(folders.get(i));
+            }
+        }
+        init(context);
         notifyDataSetChanged();
     }
 
