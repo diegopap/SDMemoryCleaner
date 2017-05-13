@@ -1,7 +1,6 @@
 package com.sdmemorycleaner;
 
 import android.content.Context;
-import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,23 +19,12 @@ import butterknife.ButterKnife;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder> {
 
-    private static final String ROOT_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android";
-
     Context context;
     ArrayList<File> folders = new ArrayList<>();
 
     public FolderAdapter(Context context) {
         this.context = context;
-        File[] directories = FileUtils.getDirectories(ROOT_PATH);
-        File[] subdirectories;
-        for (File file: directories) {
-            subdirectories = FileUtils.getDirectories(file.getPath());
-            for (File subfile: subdirectories) {
-                if (FileUtils.getFolderSize(subfile) != 0) {
-                    folders.add(subfile);
-                }
-            }
-        }
+        this.folders = FileUtils.getFolders(context);
     }
 
     @Override
