@@ -1,6 +1,7 @@
 package com.sdmemorycleaner;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
+
     private static FolderAdapter folderAdapter;
 
     @Override
@@ -28,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
             folderAdapter = new FolderAdapter(this);
         }
         recyclerView.setAdapter(folderAdapter);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                folderAdapter.init(MainActivity.this);
+                folderAdapter.notifyDataSetChanged();
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override

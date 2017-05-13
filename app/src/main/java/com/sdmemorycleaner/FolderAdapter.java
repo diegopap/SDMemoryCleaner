@@ -30,7 +30,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         init(context);
     }
 
-    private void init(Context context) {
+    public void init(Context context) {
         selectedFolders = new ArrayList<>();
         folders = FileUtils.getFolders(context);
         for (File ignored : folders) {
