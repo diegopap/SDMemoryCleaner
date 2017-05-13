@@ -16,20 +16,18 @@
         android:layout_margin="8dp"
         card_view:cardElevation="4dp"
         card_view:cardCornerRadius="4dp"
-        card_view:contentPadding="10dp">
+        card_view:contentPadding="8dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
             >
 
             <CheckBox
                 android:id="@+id/checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginRight="8dp"
                 android:layout_centerVertical="true"
                 />
 
@@ -38,7 +36,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/cover_image"
                 android:layout_toRightOf="@+id/checkbox"
-                android:layout_marginRight="16dp"
                 />
 
             <TextView
@@ -47,7 +44,7 @@
                 android:id="@+id/title"
                 android:layout_toRightOf="@+id/cover_image"
                 android:layout_alignParentTop="true"
-                android:textSize="30sp"
+                android:textSize="12sp"
                 />
 
             <TextView
@@ -56,6 +53,7 @@
                 android:id="@+id/package_name"
                 android:layout_toRightOf="@+id/cover_image"
                 android:layout_below="@+id/title"
+                android:textSize="12sp"
                 />
 
         </RelativeLayout>
