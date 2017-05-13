@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,21 +27,16 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
 
     public FolderAdapter(Context context) {
         this.context = context;
-        File[] directories = getDirectories(ROOT_PATH);
+        File[] directories = FileUtils.getDirectories(ROOT_PATH);
         File[] subdirectories;
         for (File file: directories) {
-            subdirectories = getDirectories(file.getPath());
-            Collections.addAll(folders, subdirectories);
-        }
-    }
-
-    private File[] getDirectories(String path) {
-        return new File(path).listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isDirectory();
+            subdirectories = FileUtils.getDirectories(file.getPath());
+            for (File subfile: subdirectories) {
+                if (FileUtils.getFolderSize(subfile) != 0) {
+                    folders.add(subfile);
+                }
             }
-        });
+        }
     }
 
     @Override
@@ -54,8 +47,10 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.title.setText(folders.get(position).getParent());
-        holder.package_name.setText(folders.get(position).getName());
+        File file = folders.get(position);
+        holder.title.setText(file.getParent());
+        holder.package_name.setText(file.getName());
+        holder.memory_size.setText(FileUtils.getFolderSizeString(file));
     }
 
     @Override
@@ -69,6 +64,9 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
 
         @BindView(R.id.package_name)
         TextView package_name;
+
+        @BindView(R.id.memory_size)
+        TextView memory_size;
 
         public ViewHolder(View itemView) {
             super(itemView);

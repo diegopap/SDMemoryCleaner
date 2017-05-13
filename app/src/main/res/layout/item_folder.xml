@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/title"
                 android:layout_toRightOf="@+id/cover_image"
+                android:layout_toLeftOf="@+id/memory_size"
                 android:layout_alignParentTop="true"
                 android:textSize="12sp"
                 />
@@ -52,8 +53,18 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/package_name"
                 android:layout_toRightOf="@+id/cover_image"
+                android:layout_toLeftOf="@+id/memory_size"
                 android:layout_below="@+id/title"
                 android:textSize="12sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/memory_size"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:textSize="14sp"
                 />
 
         </RelativeLayout>
