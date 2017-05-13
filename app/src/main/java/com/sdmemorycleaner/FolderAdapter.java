@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.io.File;
@@ -19,12 +21,16 @@ import butterknife.ButterKnife;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder> {
 
-    Context context;
-    ArrayList<File> folders = new ArrayList<>();
+    private Context context;
+    private ArrayList<File> folders = new ArrayList<>();
+    private ArrayList<Boolean> selectedFolders = new ArrayList<>();
 
     public FolderAdapter(Context context) {
         this.context = context;
         this.folders = FileUtils.getFolders(context);
+        for (File ignored : folders) {
+            selectedFolders.add(false);
+        }
     }
 
     @Override
@@ -34,7 +40,14 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.checkBox.setChecked(selectedFolders.get(position));
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                selectedFolders.set(holder.getAdapterPosition(), isChecked);
+            }
+        });
         File file = folders.get(position);
         holder.title.setText(file.getParent());
         holder.package_name.setText(file.getName());
@@ -55,6 +68,9 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
 
         @BindView(R.id.memory_size)
         TextView memory_size;
+
+        @BindView(R.id.checkbox)
+        CheckBox checkBox;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    private static FolderAdapter folderAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +25,10 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new FolderAdapter(this));
+        if (folderAdapter == null) {
+            folderAdapter = new FolderAdapter(this);
+        }
+        recyclerView.setAdapter(folderAdapter);
     }
 
     @Override
