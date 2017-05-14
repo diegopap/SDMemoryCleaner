@@ -37,6 +37,7 @@
                 android:layout_marginRight="8dp"
                 android:id="@+id/cover_image"
                 android:layout_toRightOf="@+id/checkbox"
+                android:src="@drawable/image_unavailable"
                 />
 
             <TextView
@@ -47,6 +48,8 @@
                 android:layout_toLeftOf="@+id/memory_size"
                 android:layout_alignParentTop="true"
                 android:textSize="12sp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 />
 
             <TextView
@@ -57,6 +60,8 @@
                 android:layout_toLeftOf="@+id/memory_size"
                 android:layout_below="@+id/title"
                 android:textSize="12sp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 />
 
             <TextView
@@ -67,6 +72,8 @@
                 android:layout_toLeftOf="@+id/memory_size"
                 android:layout_below="@+id/package_name"
                 android:textSize="12sp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 />
 
             <TextView
