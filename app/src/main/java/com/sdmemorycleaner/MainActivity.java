@@ -32,11 +32,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         requestPermissions();
     }
 
