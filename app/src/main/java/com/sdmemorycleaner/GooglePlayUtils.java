@@ -74,7 +74,11 @@ public class GooglePlayUtils {
         protected void onPostExecute(final App app) {
             if (app != null) {
                 holder.title.setText(app.title);
-                Glide.with(context).load(Uri.parse(app.image)).into(holder.cover_image);
+                try {
+                    Glide.with(context).load(Uri.parse(app.image)).into(holder.cover_image);
+                } catch (Exception e) {
+                    Log.d(TAG, e.getLocalizedMessage());
+                }
                 View.OnClickListener clickListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

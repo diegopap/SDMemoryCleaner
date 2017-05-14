@@ -52,12 +52,14 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         if (folderAdapter == null) {
             folderAdapter = new FolderAdapter(this);
+        } else {
+            folderAdapter.setContext(this);
         }
         recyclerView.setAdapter(folderAdapter);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                folderAdapter.init(MainActivity.this);
+                folderAdapter.reset(MainActivity.this);
                 folderAdapter.notifyDataSetChanged();
                 refreshLayout.setRefreshing(false);
             }

@@ -27,11 +27,15 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
     private ArrayList<Boolean> selectedFolders;
 
     public FolderAdapter(Context context) {
-        this.context = context;
-        init(context);
+        setContext(context);
+        reset(context);
     }
 
-    public void init(Context context) {
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void reset(Context context) {
         selectedFolders = new ArrayList<>();
         folders = FileUtils.getFolders(context);
         for (File ignored : folders) {
@@ -104,7 +108,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                 FileUtils.deleteRecursive(folders.get(i));
             }
         }
-        init(context);
+        reset(context);
         notifyDataSetChanged();
     }
 
