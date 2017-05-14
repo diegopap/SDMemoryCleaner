@@ -10,8 +10,11 @@ public class App {
 
     String title;
 
-    public App(String image, String title) {
+    String packageId;
+
+    public App(String image, String title, String packageId) {
         this.image = image;
         this.title = title;
+        this.packageId = packageId;
     }
 }

@@ -1,9 +1,13 @@
 package com.sdmemorycleaner;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import com.bumptech.glide.Glide;
 
@@ -25,10 +29,12 @@ public class GooglePlayUtils {
     private static final String TAG = "GooglePlayUtils";
     private static final String URL = "https://play.google.com/store/apps/details?id=";
     private static final String HTTPS = "https:";
+    private static final String MARKET = "market://details?id=";
+    private static final int TEXT_COLOR_LINK = Color.parseColor("#7bc9c2");
 
     public static void getApp(Context context, String packageName, FolderAdapter.ViewHolder holder) {
         try {
-            new LongOperation(context, holder).execute(URL + packageName, null, null);
+            new LongOperation(context, holder).execute(packageName, null, null);
         } catch (Exception e) {
             Log.d(TAG, e.getLocalizedMessage());
         }
@@ -49,12 +55,15 @@ public class GooglePlayUtils {
 
             App app = null;
             String content;
+            String packageId = params[0];
             try {
-                content = convert(new URL(params[0]).openStream());
+                content = convert(new URL(URL + packageId).openStream());
                 Document doc = Jsoup.parse(content);
                 Element image = doc.select("[itemprop=image]").first();
                 Element name = doc.select("[itemprop=name]").first();
-                app = new App(HTTPS + image.attr("src").replace("=w300-rw","=w50-rw"), name.text());
+                app = new App(HTTPS + image.attr("src").replace("=w300-rw","=w50-rw"),
+                        name.text(),
+                        packageId);
             } catch (IOException e) {
                 Log.d(TAG, e.getLocalizedMessage());
             }
@@ -62,10 +71,23 @@ public class GooglePlayUtils {
         }
 
         @Override
-        protected void onPostExecute(App app) {
+        protected void onPostExecute(final App app) {
             if (app != null) {
                 holder.title.setText(app.title);
                 Glide.with(context).load(Uri.parse(app.image)).into(holder.cover_image);
+                View.OnClickListener clickListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openInStore(context, app.packageId);
+                    }
+                };
+                holder.package_name.setOnClickListener(clickListener);
+                holder.title.setOnClickListener(clickListener);
+                holder.package_name.setPaintFlags(holder.package_name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                holder.package_name.setTextColor(TEXT_COLOR_LINK);
+                holder.title.setTextColor(TEXT_COLOR_LINK);
+                holder.cover_image.setOnClickListener(clickListener);
             } else {
                 holder.title.setText(context.getString(R.string.app_not_in_store));
                 holder.cover_image.setImageResource(R.drawable.image_unavailable);
@@ -84,6 +106,14 @@ public class GooglePlayUtils {
         }
         return result.toString();
 
+    }
+
+    public static void openInStore(Context context, String appPackageName) {
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET + appPackageName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(URL + appPackageName)));
+        }
     }
 
 }
