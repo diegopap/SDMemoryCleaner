@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 
 /**
  * Created by diego on 14/05/17.
@@ -32,11 +33,17 @@ public class GooglePlayUtils {
     private static final String MARKET = "market://details?id=";
     private static final int TEXT_COLOR_LINK = Color.parseColor("#7bc9c2");
 
+    private static final HashMap<String, App> appCache = new HashMap<>();
+
     public static void getApp(Context context, String packageName, FolderAdapter.ViewHolder holder) {
-        try {
-            new LongOperation(context, holder).execute(packageName, null, null);
-        } catch (Exception e) {
-            Log.d(TAG, e.getLocalizedMessage());
+        if (appCache.containsKey(packageName)) {
+            updateAppDetails(context, appCache.get(packageName), holder);
+        } else {
+            try {
+                new LongOperation(context, holder).execute(packageName, null, null);
+            } catch (Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
+            }
         }
     }
 
@@ -64,6 +71,7 @@ public class GooglePlayUtils {
                 app = new App(HTTPS + image.attr("src").replace("=w300-rw","=w50-rw"),
                         name.text(),
                         packageId);
+                appCache.put(packageId, app);
             } catch (IOException e) {
                 Log.d(TAG, e.getLocalizedMessage());
             }
@@ -72,30 +80,7 @@ public class GooglePlayUtils {
 
         @Override
         protected void onPostExecute(final App app) {
-            if (app != null) {
-                holder.title.setText(app.title);
-                try {
-                    Glide.with(context).load(Uri.parse(app.image)).into(holder.cover_image);
-                } catch (Exception e) {
-                    Log.d(TAG, e.getLocalizedMessage());
-                }
-                View.OnClickListener clickListener = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openInStore(context, app.packageId);
-                    }
-                };
-                holder.package_name.setOnClickListener(clickListener);
-                holder.title.setOnClickListener(clickListener);
-                holder.package_name.setPaintFlags(holder.package_name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                holder.package_name.setTextColor(TEXT_COLOR_LINK);
-                holder.title.setTextColor(TEXT_COLOR_LINK);
-                holder.cover_image.setOnClickListener(clickListener);
-            } else {
-                holder.title.setText(context.getString(R.string.app_not_in_store));
-                holder.cover_image.setImageResource(R.drawable.image_unavailable);
-            }
+            updateAppDetails(context, app, holder);
             super.onPostExecute(app);
         }
     }
@@ -120,4 +105,30 @@ public class GooglePlayUtils {
         }
     }
 
+    public static void updateAppDetails(final Context context, final App app, FolderAdapter.ViewHolder holder ) {
+        if (app != null) {
+            holder.title.setText(app.title);
+            try {
+                Glide.with(context).load(Uri.parse(app.image)).into(holder.cover_image);
+            } catch (Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
+            }
+            View.OnClickListener clickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openInStore(context, app.packageId);
+                }
+            };
+            holder.package_name.setOnClickListener(clickListener);
+            holder.title.setOnClickListener(clickListener);
+            holder.package_name.setPaintFlags(holder.package_name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            holder.package_name.setTextColor(TEXT_COLOR_LINK);
+            holder.title.setTextColor(TEXT_COLOR_LINK);
+            holder.cover_image.setOnClickListener(clickListener);
+        } else {
+            holder.title.setText(context.getString(R.string.app_not_in_store));
+            holder.cover_image.setImageResource(R.drawable.image_unavailable);
+        }
+    }
 }

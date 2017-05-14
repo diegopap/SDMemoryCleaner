@@ -59,10 +59,11 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
             }
         });
         File file = folders.get(position);
+        String packageId = file.getName();
         holder.location.setText(file.getParent());
-        holder.package_name.setText(file.getName());
+        holder.package_name.setText(packageId);
         holder.memory_size.setText(FileUtils.getFolderSizeString(file));
-        GooglePlayUtils.getApp(context, file.getName(), holder);
+        GooglePlayUtils.getApp(context, packageId, holder);
     }
 
     @Override
