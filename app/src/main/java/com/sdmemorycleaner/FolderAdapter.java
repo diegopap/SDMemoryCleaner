@@ -64,6 +64,12 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         holder.package_name.setText(packageId);
         holder.memory_size.setText(FileUtils.getFolderSizeString(file));
         GooglePlayUtils.getApp(context, packageId, holder);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.checkBox.toggle();
+            }
+        });
     }
 
     @Override
