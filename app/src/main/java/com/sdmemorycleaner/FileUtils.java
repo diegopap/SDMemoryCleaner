@@ -66,7 +66,7 @@ public class FileUtils {
         } else if(size >= KB) {
             value = size/KB + " Kb";
         } else {
-            value = size + " bytes";
+            value = "< 1 KB";
         }
         return value;
     }

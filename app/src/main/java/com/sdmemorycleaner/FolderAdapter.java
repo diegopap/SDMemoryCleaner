@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -54,9 +55,10 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
             }
         });
         File file = folders.get(position);
-        holder.title.setText(file.getParent());
+        holder.location.setText(file.getParent());
         holder.package_name.setText(file.getName());
         holder.memory_size.setText(FileUtils.getFolderSizeString(file));
+        GooglePlayUtils.getApp(context, file.getName(), holder);
     }
 
     @Override
@@ -71,11 +73,17 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         @BindView(R.id.package_name)
         TextView package_name;
 
+        @BindView(R.id.location)
+        TextView location;
+
         @BindView(R.id.memory_size)
         TextView memory_size;
 
         @BindView(R.id.checkbox)
         CheckBox checkBox;
+
+        @BindView(R.id.cover_image)
+        ImageView cover_image;
 
         public ViewHolder(View itemView) {
             super(itemView);
